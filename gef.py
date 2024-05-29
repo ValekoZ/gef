@@ -8791,6 +8791,12 @@ class VMMapCommand(GenericCommand):
                 addr = int(argv[0], 0)
                 if addr >= entry.page_start and addr < entry.page_end:
                     self.print_entry(entry)
+            elif argv[0][0] in 'r-' and \
+                    argv[0][1] in 'w-' and \
+                    argv[0][2] in 'x-':
+                perms = Permission.from_process_maps(argv[0])
+                if entry.permission == perms:
+                    self.print_entry(entry)
             else:
                 addr = safe_parse_and_eval(argv[0])
                 if addr is not None and addr >= entry.page_start and addr < entry.page_end:
